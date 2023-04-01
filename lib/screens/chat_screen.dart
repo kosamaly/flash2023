@@ -16,12 +16,12 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 //Implement logout functionality
               }),
         ],
-        title: Text('⚡️Chat'),
+        title: const Text('⚡️Chat'),
         backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
@@ -29,27 +29,25 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      onChanged: (value) {
-                        //Do something with the user input.
-                      },
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      //Implement send functionality.
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) {
+                      //Do something with the user input.
                     },
-                    child: Text(
-                      'Send',
-                    ),
                   ),
-                ],
-              ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    //Implement send functionality.
+                  },
+                  child: const Text(
+                    'Send',
+                  ),
+                ),
+              ],
             ),
           ],
         ),

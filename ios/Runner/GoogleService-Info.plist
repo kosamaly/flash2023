@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>248257576821-7c72ir5h1sc9a23aadmfb16c9gfhrfge.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.248257576821-7c72ir5h1sc9a23aadmfb16c9gfhrfge</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB0myNZkVo4Jnimd7pmPeS5_enhnSGz01U</string>
+	<key>GCM_SENDER_ID</key>
+	<string>248257576821</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.chat2me.flash</string>
+	<key>PROJECT_ID</key>
+	<string>chat2me-82656</string>
+	<key>STORAGE_BUCKET</key>
+	<string>chat2me-82656.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:248257576821:ios:144fc6694d578daf8e9d3c</string>
+</dict>
+</plist>

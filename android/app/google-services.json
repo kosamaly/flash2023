@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "228307976219",
+    "project_id": "chat2me-9bcae",
+    "storage_bucket": "chat2me-9bcae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:228307976219:android:4b7938e85e436d54fcb8be",
+        "android_client_info": {
+          "package_name": "com.chat2me.flash"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "228307976219-fi4kb8ds2on7ppmi18dopkrpnalomu1a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzQjXxPZBKMrfKNuz1vgXu0d70zoc8zzg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "228307976219-fi4kb8ds2on7ppmi18dopkrpnalomu1a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

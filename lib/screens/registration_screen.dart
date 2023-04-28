@@ -1,15 +1,12 @@
-import 'package:flash/screens/constants.dart';
+import 'package:flash/componenets/rounded-button.dart';
 import 'package:flutter/material.dart';
-import '../components/rounded-button.dart';
-import 'constants.dart';
+
+import '../constants.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
-
-  static const String id = 'registration_screen';
-
+  static String id = "registration_screen";
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenState();
+  _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
@@ -18,43 +15,38 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Hero(
-              tag: "logo",
-              child: SizedBox(
-                height: 200.0,
-                child: Image.asset('images/logo.png'),
-              ),
+            Container(
+              height: 200.0,
+              child: Image.asset('images/logo.png'),
             ),
-            const SizedBox(
+            SizedBox(
               height: 48.0,
             ),
             TextField(
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: "Enter Email")),
-            const SizedBox(
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText: "Enter your emailx")),
+            SizedBox(
               height: 8.0,
             ),
             TextField(
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: "Enter Password")),
-            const SizedBox(
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText: "Enter your password")),
+            SizedBox(
               height: 24.0,
             ),
             RoundedButton(
-                colour: Colors.blueAccent,
-                title: "Registration",
-                onPressed: () {})
+                colour: Colors.blueAccent, title: 'Register', onPressed: () {})
           ],
         ),
       ),

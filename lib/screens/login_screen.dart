@@ -1,15 +1,12 @@
-import 'package:flash/components/rounded-button.dart';
-import 'package:flash/screens/constants.dart';
+import 'package:flash/componenets/rounded-button.dart';
 import 'package:flutter/material.dart';
-import 'constants.dart';
+
+import '../constants.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-
-  static const String id = 'login_screen';
-
+  static String id = "login_screen";
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -18,28 +15,25 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Hero(
-              tag: 'logo',
-              child: SizedBox(
-                height: 200.0,
-                child: Image.asset('images/logo.png'),
-              ),
+            Container(
+              height: 200.0,
+              child: Image.asset('images/logo.png'),
             ),
-            const SizedBox(
+            SizedBox(
               height: 48.0,
             ),
             TextField(
                 onChanged: (value) {
                   //Do something with the user input.
                 },
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: "Enter Password")),
-            const SizedBox(
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText: "Enter your email")),
+            SizedBox(
               height: 8.0,
             ),
             TextField(
@@ -47,14 +41,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   //Do something with the user input.
                 },
                 decoration:
-                    kTextFieldDecoration.copyWith(hintText: "Enter Password")),
-            const SizedBox(
+                    kTextFieldDecoration.copyWith(hintText: "Enter your pass")),
+            SizedBox(
               height: 24.0,
             ),
             RoundedButton(
-                colour: Colors.lightBlueAccent,
-                title: "Login",
-                onPressed: () {})
+                colour: Colors.blueAccent, title: "Log In", onPressed: () {})
           ],
         ),
       ),

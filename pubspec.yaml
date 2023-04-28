@@ -32,11 +32,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-    
+
   animated_text_kit: ^4.2.2
   cloud_firestore: ^4.5.2
   firebase_auth: ^4.4.2
-  firebase_core: ^2.10.0 
+  firebase_core: ^2.10.0
 
 
 
@@ -69,7 +69,7 @@ flutter:
   uses-material-design: true
 
 
-    # To add assets to your application, add an assets section, like this:
+  # To add assets to your application, add an assets section, like this:
   assets:
     - images/logo.png
 

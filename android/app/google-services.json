@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "228307976219",
-    "project_id": "chat2me-9bcae",
-    "storage_bucket": "chat2me-9bcae.appspot.com"
+    "project_number": "248257576821",
+    "project_id": "chat2me-82656",
+    "storage_bucket": "chat2me-82656.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:228307976219:android:4b7938e85e436d54fcb8be",
+        "mobilesdk_app_id": "1:248257576821:android:f597241828048af08e9d3c",
         "android_client_info": {
-          "package_name": "com.chat2me.flash"
+          "package_name": "co.chat2meKhaled.flash_chat"
         }
       },
       "oauth_client": [
         {
-          "client_id": "228307976219-fi4kb8ds2on7ppmi18dopkrpnalomu1a.apps.googleusercontent.com",
+          "client_id": "248257576821-griiasviad4ncr7q5qfbp9336kd45poj.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDzQjXxPZBKMrfKNuz1vgXu0d70zoc8zzg"
+          "current_key": "AIzaSyAj-dCinfZs4CjffovEhxHSAi9ddMWLKoo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "228307976219-fi4kb8ds2on7ppmi18dopkrpnalomu1a.apps.googleusercontent.com",
+              "client_id": "248257576821-griiasviad4ncr7q5qfbp9336kd45poj.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "248257576821-7c72ir5h1sc9a23aadmfb16c9gfhrfge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.chat2me.flash"
+              }
             }
           ]
         }

@@ -37,6 +37,7 @@ dependencies:
   cloud_firestore: ^4.5.2
   firebase_auth: ^4.4.2
   firebase_core: ^2.10.0
+  flutter_rename_app_plus: ^1.1.0
 
 
 
@@ -98,3 +99,14 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+
+  # To change the app name/ids values use these commands:
+# flutter pub get
+# flutter pub run flutter_rename_app_plus
+flutter_rename_app_plus:
+  application_name: Chat2Me
+  dart_package_name: flash
+  application_id: co.chat2meKhaled.flash_chat
+  bundle_id: com.chat2me.flash
+  android_package_name: co.chat2meKhaled.flash_chat

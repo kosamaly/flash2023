@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash/screens/chat_screen.dart';
+import 'package:flash/widgets/eye_button.dart';
 import 'package:flash/widgets/loading_widget.dart';
 import 'package:flash/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
@@ -57,24 +58,24 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                 height: 8.0,
               ),
               TextField(
-                  onChanged: (value) {
-                    password = value;
-                  },
-                  obscureText: isObscured,
-                  decoration: kTextFieldDecoration.copyWith(
-                    hintText: "Enter your password",
-                    suffixIcon: IconButton(
-                      padding: const EdgeInsetsDirectional.only(end: 12),
-                      icon: isObscured
-                          ? const Icon(Icons.visibility)
-                          : const Icon(Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
+                onChanged: (value) {
+                  password = value;
+                },
+                obscureText: isObscured,
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: "Enter your password",
+                  suffixIcon: EyeButton(
+                    isObscured: isObscured,
+                    onPressed: () {
+                      setState(
+                        () {
                           isObscured = !isObscured;
-                        });
-                      },
-                    ),
-                  )),
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 24.0,
               ),

@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -19,8 +21,11 @@ class ChatScreenState extends State<ChatScreen> {
         actions: <Widget>[
           IconButton(
               icon: const Icon(Icons.close),
-              onPressed: () {
-                //Implement logout functionality
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+
+                if (!mounted) return;
+                Navigator.pushNamed(context, WelcomeScreen.id);
               }),
         ],
         title: const Text('⚡️Chat'),

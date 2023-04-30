@@ -78,17 +78,19 @@ class LoginScreenState extends State<LoginScreen> {
                             });
 
                             ///what is this?
-                            final newUser = await FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
+                            final user = await FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
                                     email: email!, password: password!);
 
-                            log("Login Success $newUser");
+                            log("Login Success $user");
+                            log("Token ${user.credential?.accessToken}");
 
                             setState(() {
                               isLoading = false;
                             });
                             // ignore: use_build_context_synchronously
-                            Navigator.pushNamed(context, ChatScreen.id);
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, ChatScreen.id, (_) => false);
                           }
                         } catch (e) {
                           log("Login Error $e");
@@ -96,8 +98,17 @@ class LoginScreenState extends State<LoginScreen> {
                             isLoading = false;
                             Alert(
                                     context: context,
+                                    buttons: [
+                                      DialogButton(
+                                          onPressed: () {},
+                                          child: FilledButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text("OK")))
+                                    ],
                                     title: "Failed Login",
-                                    desc: "Incorrect Email Or Password.")
+                                    desc: (e as FirebaseAuthException).message)
                                 .show();
                           });
                         }

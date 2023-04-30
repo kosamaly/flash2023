@@ -21,15 +21,9 @@ class RegistrationScreenState extends State<RegistrationScreen> {
   String? email;
   String? password;
   bool isLoading = false;
-  var isObsecured;
+  bool isObscured = true;
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    isObsecured = true;
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -66,17 +60,17 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                   onChanged: (value) {
                     password = value;
                   },
-                  obscureText: isObsecured,
+                  obscureText: isObscured,
                   decoration: kTextFieldDecoration.copyWith(
                     hintText: "Enter your password",
                     suffixIcon: IconButton(
-                      padding: EdgeInsetsDirectional.only(end: 12),
-                      icon: isObsecured
+                      padding: const EdgeInsetsDirectional.only(end: 12),
+                      icon: isObscured
                           ? const Icon(Icons.visibility)
-                          : Icon(Icons.visibility_off),
+                          : const Icon(Icons.visibility_off),
                       onPressed: () {
                         setState(() {
-                          isObsecured = !isObsecured;
+                          isObscured = !isObscured;
                         });
                       },
                     ),
@@ -107,14 +101,14 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                               isLoading = false;
                             });
                             // ignore: use_build_context_synchronously
-                            Navigator.pushNamed(context, ChatScreen.id);
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, ChatScreen.id, (_) => false);
                           }
                         } catch (e) {
                           log("Register Error $e");
                           setState(() {
                             isLoading = false;
 
-                            /// Todo if email success what should i do ?
                             Alert(
                                     context: context,
                                     title: "Failed Registration",

@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash/screens/chat_screen.dart';
 import 'package:flash/screens/login_screen.dart';
 import 'package:flash/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +18,22 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      log('User is currently signed out!');
+    } else {
+      log('User is signed in!');
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacementNamed(context, ChatScreen.id);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

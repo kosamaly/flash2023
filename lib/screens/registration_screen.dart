@@ -5,6 +5,7 @@ import 'package:flash/screens/chat_screen.dart';
 import 'package:flash/widgets/loading_widget.dart';
 import 'package:flash/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../constants.dart';
 
@@ -20,8 +21,15 @@ class RegistrationScreenState extends State<RegistrationScreen> {
   String? email;
   String? password;
   bool isLoading = false;
+  var isObsecured;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isObsecured = true;
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -58,9 +66,20 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                   onChanged: (value) {
                     password = value;
                   },
-                  obscureText: true,
+                  obscureText: isObsecured,
                   decoration: kTextFieldDecoration.copyWith(
                     hintText: "Enter your password",
+                    suffixIcon: IconButton(
+                      padding: EdgeInsetsDirectional.only(end: 12),
+                      icon: isObsecured
+                          ? const Icon(Icons.visibility)
+                          : Icon(Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          isObsecured = !isObsecured;
+                        });
+                      },
+                    ),
                   )),
               const SizedBox(
                 height: 24.0,
@@ -76,6 +95,8 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                             setState(() {
                               isLoading = true;
                             });
+
+                            ///what is this?
                             final newUser = await FirebaseAuth.instance
                                 .createUserWithEmailAndPassword(
                                     email: email!, password: password!);
@@ -92,6 +113,13 @@ class RegistrationScreenState extends State<RegistrationScreen> {
                           log("Register Error $e");
                           setState(() {
                             isLoading = false;
+
+                            /// Todo if email success what should i do ?
+                            Alert(
+                                    context: context,
+                                    title: "Failed Registration",
+                                    desc: "Incorrect Email Or Password.")
+                                .show();
                           });
                         }
                       })

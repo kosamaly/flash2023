@@ -5,6 +5,7 @@ import 'package:flash/screens/chat_screen.dart';
 import 'package:flash/widgets/loading_widget.dart';
 import 'package:flash/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../constants.dart';
 
@@ -75,11 +76,13 @@ class LoginScreenState extends State<LoginScreen> {
                             setState(() {
                               isLoading = true;
                             });
-                            final user = await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
+
+                            ///what is this?
+                            final newUser = await FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
                                     email: email!, password: password!);
 
-                            log("User Login Success $user");
+                            log("Login Success $newUser");
 
                             setState(() {
                               isLoading = false;
@@ -91,6 +94,11 @@ class LoginScreenState extends State<LoginScreen> {
                           log("Login Error $e");
                           setState(() {
                             isLoading = false;
+                            Alert(
+                                    context: context,
+                                    title: "Failed Login",
+                                    desc: "Incorrect Email Or Password.")
+                                .show();
                           });
                         }
                       })

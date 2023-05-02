@@ -101,7 +101,7 @@ class LoginScreenState extends State<LoginScreen> {
                                     buttons: [
                                       DialogButton(
                                           onPressed: () {},
-                                          child: FilledButton(
+                                          child: ElevatedButton(
                                               onPressed: () {
                                                 Navigator.pop(context);
                                               },

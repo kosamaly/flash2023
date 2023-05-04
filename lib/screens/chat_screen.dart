@@ -75,9 +75,15 @@ class ChatScreenState extends State<ChatScreen> {
                             // Has messages
                             ListView(
                                 children: docs
-                                    .map((doc) => Padding(
+                                    .map((doc) => Container(
+                                          margin: const EdgeInsets.all(8.0),
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text(doc.data()["text"]!),
+                                          color: Colors.green,
+                                          child: Text(
+                                            doc.data()["text"]!,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
                                         ))
                                     .toList(),
                               );

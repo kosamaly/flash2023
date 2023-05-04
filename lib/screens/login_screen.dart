@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 import '../constants.dart';
+import '../widgets/eye_button.dart';
 
 class LoginScreen extends StatefulWidget {
   static String id = "login_screen";
@@ -21,6 +22,7 @@ class LoginScreenState extends State<LoginScreen> {
   String? email;
   String? password;
   bool isLoading = false;
+  bool isObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +58,24 @@ class LoginScreenState extends State<LoginScreen> {
                 height: 8.0,
               ),
               TextField(
-                  onChanged: (value) {
-                    password = value;
-                  },
-                  obscureText: true,
-                  decoration: kTextFieldDecoration.copyWith(
-                      hintText: "Enter your pass")),
+                onChanged: (value) {
+                  password = value;
+                },
+                obscureText: isObscured,
+                decoration: kTextFieldDecoration.copyWith(
+                  hintText: "Enter your password",
+                  suffixIcon: EyeButton(
+                    isObscured: isObscured,
+                    onPressed: () {
+                      setState(
+                        () {
+                          isObscured = !isObscured;
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 24.0,
               ),

@@ -16,25 +16,33 @@ class ChatScreen extends StatefulWidget {
 
 class ChatScreenState extends State<ChatScreen> {
   final fireStore = FirebaseFirestore.instance;
-  final _auth = FirebaseAuth.instance;
+  // final _auth = FirebaseAuth.instance;
 
   String messageText = "";
   late User logedInUser;
   @override
   void initState() {
-    getCurrentUser();
+    // getCurrentUser();
     super.initState();
   }
 
-  void getCurrentUser() async {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        logedInUser = user;
-        print(logedInUser.email);
+  // void getCurrentUser() async {
+  //   try {
+  //     final user = _auth.currentUser;
+  //     if (user != null) {
+  //       logedInUser = user;
+  //       print(logedInUser.email);
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  void messageStream() async {
+    await for (var snapshot in fireStore.collection('message').snapshots()) {
+      for (var message in snapshot.docChanges) {
+        print(message.doc);
       }
-    } catch (e) {
-      print(e);
     }
   }
 
@@ -63,6 +71,22 @@ class ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            StreamBuilder<QuerySnapshot>(
+                stream: fireStore.collection('messages').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final messages = snapshot.data?.docChanges;
+                    List<Text> messageWidgets = [];
+                    for (var message in messages)
+
+                      ///doc or data like Angla
+                      final messageText = message.doc['text'];
+                    final messageSender =message.doc ['sender'];
+                    final messageWidget = Text(messageText from $messageSender);
+                    messageWidget.doc(messageWidget);
+                  }
+                  return Column( children: messageWidgets,);
+                }),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(

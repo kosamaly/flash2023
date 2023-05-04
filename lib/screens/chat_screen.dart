@@ -58,7 +58,7 @@ class ChatScreenState extends State<ChatScreen> {
               child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                 stream: _fireStore.collection('messages').snapshots(),
                 builder: (context, collection) {
-                  // Data
+                  // Success
                   if (collection.hasData) {
                     final docs = collection.data!.docs;
 
@@ -75,7 +75,10 @@ class ChatScreenState extends State<ChatScreen> {
                             // Has messages
                             ListView(
                                 children: docs
-                                    .map((doc) => Container(
+                                    .map((doc) =>
+
+                                        // Single Msg UI
+                                        Container(
                                           margin: const EdgeInsets.all(8.0),
                                           padding: const EdgeInsets.all(8.0),
                                           color: Colors.green,

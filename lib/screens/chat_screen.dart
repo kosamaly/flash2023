@@ -115,10 +115,11 @@ class ChatScreenState extends State<ChatScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // fireStore.collection("messages").add({
-                      //   "text": messageText,
-                      //   "sender": logedInUser.email,
-                      // });
+                      _fireStore.collection("messages").add({
+                        "text": "Hello from app",
+                        "sender": loggedInUser.email,
+                        "date": FieldValue.serverTimestamp()
+                      });
                     },
                     child: const Text(
                       'Send',

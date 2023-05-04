@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash/screens/welcome_screen.dart';
+import 'package:flash/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -15,38 +16,17 @@ class ChatScreen extends StatefulWidget {
 }
 
 class ChatScreenState extends State<ChatScreen> {
-  final fireStore = FirebaseFirestore.instance;
-  // final _auth = FirebaseAuth.instance;
+  final _fireStore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
 
   String messageText = "";
-  late User logedInUser;
+  late User loggedInUser;
+
   @override
   void initState() {
-    // getCurrentUser();
     super.initState();
+    loggedInUser = _auth.currentUser!;
   }
-
-  // void getCurrentUser() async {
-  //   try {
-  //     final user = _auth.currentUser;
-  //     if (user != null) {
-  //       logedInUser = user;
-  //       print(logedInUser.email);
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
-  void messageStream() async {
-    await for (var snapshot in fireStore.collection('message').snapshots()) {
-      for (var message in snapshot.docChanges) {
-        print(message.doc);
-      }
-    }
-  }
-
-  /// a variable to save firebase message in it
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +34,10 @@ class ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         leading: null,
         actions: <Widget>[
+          // Logout Button
           IconButton(
               icon: const Icon(Icons.close),
+              // Logout Function
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
 
@@ -71,22 +53,53 @@ class ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            StreamBuilder<QuerySnapshot>(
-                stream: fireStore.collection('messages').snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    final messages = snapshot.data?.docChanges;
-                    List<Text> messageWidgets = [];
-                    for (var message in messages)
+            //* List of messages
+            Expanded(
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: _fireStore.collection('messages').snapshots(),
+                builder: (context, collection) {
+                  // Data
+                  if (collection.hasData) {
+                    final docs = collection.data!.docs;
 
-                      ///doc or data like Angla
-                      final messageText = message.doc['text'];
-                    final messageSender =message.doc ['sender'];
-                    final messageWidget = Text(messageText from $messageSender);
-                    messageWidget.doc(messageWidget);
+                    return
+                        // Docs is empty
+                        docs.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  "There is no messages.",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              )
+                            :
+                            // Has messages
+                            ListView(
+                                children: docs
+                                    .map((doc) => Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(doc.data()["text"]!),
+                                        ))
+                                    .toList(),
+                              );
                   }
-                  return Column( children: messageWidgets,);
-                }),
+                  // Error
+                  else if (collection.hasError) {
+                    return const Center(
+                      child: Text(
+                        "Something went wrong!",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
+                  // Loading
+                  else {
+                    return const LoadingWidget();
+                  }
+                },
+              ),
+            ),
+
+            //* Send Area
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -102,10 +115,10 @@ class ChatScreenState extends State<ChatScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      fireStore.collection("messages").add({
-                        "text": messageText,
-                        "sender": logedInUser.email,
-                      });
+                      // fireStore.collection("messages").add({
+                      //   "text": messageText,
+                      //   "sender": logedInUser.email,
+                      // });
                     },
                     child: const Text(
                       'Send',

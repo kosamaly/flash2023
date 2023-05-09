@@ -19,13 +19,54 @@ class ChatScreenState extends State<ChatScreen> {
   final _fireStore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
 
-  String messageText = "";
+  TextEditingController textEditingController = TextEditingController();
   late User loggedInUser;
 
   @override
   void initState() {
     super.initState();
     loggedInUser = _auth.currentUser!;
+  }
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+/*
+Widget buttonKey(Color color, int soundNumber) {
+    return Expanded(
+      child: InkWell(
+        onTap: () {
+          playSound(soundNumber);
+        },
+        child: Container(
+          color: color,
+        ),
+      ),
+    );
+  }
+
+*/
+
+  Widget singleMsgUI(Map<String, dynamic> msg) {
+    final isMe = msg["sender"] == loggedInUser.email;
+    return Align(
+      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: isMe ? Colors.green : Colors.grey,
+        ),
+        child: Text(
+          msg["text"]!,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    );
   }
 
   @override
@@ -56,7 +97,10 @@ class ChatScreenState extends State<ChatScreen> {
             //* List of messages
             Expanded(
               child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: _fireStore.collection('messages').snapshots(),
+                stream: _fireStore
+                    .collection('messages')
+                    .orderBy("date")
+                    .snapshots(),
                 builder: (context, collection) {
                   // Success
                   if (collection.hasData) {
@@ -75,21 +119,12 @@ class ChatScreenState extends State<ChatScreen> {
                             // Has messages
                             ListView(
                                 children: docs
-                                    .map((doc) =>
-
-                                        // Single Msg UI
-                                        Container(
-                                          margin: const EdgeInsets.all(8.0),
-                                          padding: const EdgeInsets.all(8.0),
-                                          color: Colors.green,
-                                          child: Text(
-                                            doc.data()["text"]!,
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        ))
-                                    .toList(),
-                              );
+                                    .map(
+                                      (doc) => singleMsgUI(
+                                        doc.data(),
+                                      ),
+                                    )
+                                    .toList());
                   }
                   // Error
                   else if (collection.hasError) {
@@ -116,19 +151,24 @@ class ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
-                      onChanged: (value) {
-                        messageText = value;
-                      },
+                      controller: textEditingController,
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
                   TextButton(
                     onPressed: () {
-                      _fireStore.collection("messages").add({
-                        "text": "Hello from app",
-                        "sender": loggedInUser.email,
-                        "date": FieldValue.serverTimestamp()
-                      });
+                      if (textEditingController.text.trim().isNotEmpty) {
+                        // Send msg
+                        _fireStore.collection("messages").add(
+                            // Message Map
+                            {
+                              "text": textEditingController.text,
+                              "sender": loggedInUser.email,
+                              "date": FieldValue.serverTimestamp()
+                            });
+                        // Clear text
+                        textEditingController.clear();
+                      }
                     },
                     child: const Text(
                       'Send',

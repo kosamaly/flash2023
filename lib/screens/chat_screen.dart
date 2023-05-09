@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flash/screens/welcome_screen.dart';
+import 'package:flash/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// for database in firebase
 import '../constants.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -13,14 +16,69 @@ class ChatScreen extends StatefulWidget {
 }
 
 class ChatScreenState extends State<ChatScreen> {
+  final _fireStore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
+
+  TextEditingController textEditingController = TextEditingController();
+  late User loggedInUser;
+
+  @override
+  void initState() {
+    super.initState();
+    loggedInUser = _auth.currentUser!;
+  }
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+/*
+Widget buttonKey(Color color, int soundNumber) {
+    return Expanded(
+      child: InkWell(
+        onTap: () {
+          playSound(soundNumber);
+        },
+        child: Container(
+          color: color,
+        ),
+      ),
+    );
+  }
+
+*/
+
+  Widget singleMsgUI(Map<String, dynamic> msg) {
+    final isMe = msg["sender"] == loggedInUser.email;
+    return Align(
+      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: isMe ? Colors.green : Colors.grey,
+        ),
+        child: Text(
+          msg["text"]!,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: null,
         actions: <Widget>[
+          // Logout Button
           IconButton(
               icon: const Icon(Icons.close),
+              // Logout Function
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
 
@@ -36,6 +94,56 @@ class ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            //* List of messages
+            Expanded(
+              child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: _fireStore
+                    .collection('messages')
+                    .orderBy("date")
+                    .snapshots(),
+                builder: (context, collection) {
+                  // Success
+                  if (collection.hasData) {
+                    final docs = collection.data!.docs;
+
+                    return
+                        // Docs is empty
+                        docs.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  "There is no messages.",
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              )
+                            :
+                            // Has messages
+                            ListView(
+                                children: docs
+                                    .map(
+                                      (doc) => singleMsgUI(
+                                        doc.data(),
+                                      ),
+                                    )
+                                    .toList());
+                  }
+                  // Error
+                  else if (collection.hasError) {
+                    return const Center(
+                      child: Text(
+                        "Something went wrong!",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    );
+                  }
+                  // Loading
+                  else {
+                    return const LoadingWidget();
+                  }
+                },
+              ),
+            ),
+
+            //* Send Area
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -43,15 +151,24 @@ class ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
-                      onChanged: (value) {
-                        //Do something with the user input.
-                      },
+                      controller: textEditingController,
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
                   TextButton(
                     onPressed: () {
-                      //Implement send functionality.
+                      if (textEditingController.text.trim().isNotEmpty) {
+                        // Send msg
+                        _fireStore.collection("messages").add(
+                            // Message Map
+                            {
+                              "text": textEditingController.text,
+                              "sender": loggedInUser.email,
+                              "date": FieldValue.serverTimestamp()
+                            });
+                        // Clear text
+                        textEditingController.clear();
+                      }
                     },
                     child: const Text(
                       'Send',

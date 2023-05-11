@@ -22,6 +22,8 @@ class ChatScreenState extends State<ChatScreen> {
   TextEditingController textEditingController = TextEditingController();
   late User loggedInUser;
 
+  get msg => null;
+
   @override
   void initState() {
     super.initState();
@@ -51,20 +53,63 @@ Widget buttonKey(Color color, int soundNumber) {
 */
 
   Widget singleMsgUI(Map<String, dynamic> msg) {
-    final isMe = msg["sender"] == loggedInUser.email;
+    final isMe = msg["sender"]! == loggedInUser.email;
+    final messageDate = msg["date"]!.toDate().hour.toString() +
+        ":" +
+        msg['date']!.toDate().minute.toString();
+
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.all(8.0),
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: isMe ? Colors.green : Colors.grey,
-        ),
-        child: Text(
-          msg["text"]!,
-          style: const TextStyle(color: Colors.white),
-        ),
+      child: Column(
+        children: [
+          Text(
+            msg["sender"]!,
+            style: const TextStyle(color: Colors.black54, fontSize: 14),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          InkWell(
+            child: GestureDetector(
+              onTap: () {
+                Column(
+                  children: [
+                    Text(
+                      "$messageDate",
+                      style: TextStyle(fontSize: 100, color: Colors.red),
+                    ),
+                  ],
+                );
+
+                setState(() {
+                  Text(
+                    "$messageDate",
+                    style: TextStyle(fontSize: 100, color: Colors.red),
+                  );
+                  print(messageDate);
+                });
+              },
+              child: Container(
+                margin: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: isMe ? Colors.green : Colors.redAccent,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      msg["text"]!,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ],
+
+                  //
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -107,6 +152,7 @@ Widget buttonKey(Color color, int soundNumber) {
                     final docs = collection.data!.docs;
 
                     return
+
                         // Docs is empty
                         docs.isEmpty
                             ? const Center(
@@ -155,24 +201,29 @@ Widget buttonKey(Color color, int soundNumber) {
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      if (textEditingController.text.trim().isNotEmpty) {
-                        // Send msg
-                        _fireStore.collection("messages").add(
-                            // Message Map
-                            {
-                              "text": textEditingController.text,
-                              "sender": loggedInUser.email,
-                              "date": FieldValue.serverTimestamp()
-                            });
-                        // Clear text
-                        textEditingController.clear();
-                      }
-                    },
-                    child: const Text(
-                      'Send',
-                      style: kSendButtonTextStyle,
+                  InkWell(
+                    child: TextButton(
+                      onPressed: () {
+                        if (textEditingController.text.trim().isNotEmpty) {
+                          // Send msg
+
+                          _fireStore.collection("messages").add(
+                              // Message Map
+                              {
+                                "text": textEditingController.text,
+                                "sender": loggedInUser.email,
+                                "date": FieldValue.serverTimestamp(),
+                              });
+                          // Clear text
+                          textEditingController.clear();
+                        }
+
+                        // ()
+                      },
+                      child: const Text(
+                        'Send',
+                        style: kSendButtonTextStyle,
+                      ),
                     ),
                   ),
                 ],

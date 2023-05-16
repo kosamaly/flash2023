@@ -1,6 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash/models/message_model.dart';
 import 'package:flash/screens/welcome_screen.dart';
 import 'package:flash/widgets/loading_widget.dart';
+import 'package:flash/widgets/message_widget.dart';
+import 'package:flash/widgets/send_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -34,43 +37,9 @@ class ChatScreenState extends State<ChatScreen> {
     super.dispose();
   }
 
-/*
-Widget buttonKey(Color color, int soundNumber) {
-    return Expanded(
-      child: InkWell(
-        onTap: () {
-          playSound(soundNumber);
-        },
-        child: Container(
-          color: color,
-        ),
-      ),
-    );
-  }
-
-*/
-
-  Widget singleMsgUI(Map<String, dynamic> msg) {
-    final isMe = msg["sender"] == loggedInUser.email;
-    return Align(
-      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.all(8.0),
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: isMe ? Colors.green : Colors.grey,
-        ),
-        child: Text(
-          msg["text"]!,
-          style: const TextStyle(color: Colors.white),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    print("ChatScreen Build");
     return Scaffold(
       appBar: AppBar(
         leading: null,
@@ -107,6 +76,7 @@ Widget buttonKey(Color color, int soundNumber) {
                     final docs = collection.data!.docs;
 
                     return
+
                         // Docs is empty
                         docs.isEmpty
                             ? const Center(
@@ -120,8 +90,11 @@ Widget buttonKey(Color color, int soundNumber) {
                             ListView(
                                 children: docs
                                     .map(
-                                      (doc) => singleMsgUI(
-                                        doc.data(),
+                                      (doc) => MessageWidget(
+                                        msgModel: MsgModel.fromJson(
+                                          doc.data(),
+                                        ),
+                                        userEmail: loggedInUser.email ?? "",
                                       ),
                                     )
                                     .toList());
@@ -144,40 +117,7 @@ Widget buttonKey(Color color, int soundNumber) {
             ),
 
             //* Send Area
-            Container(
-              decoration: kMessageContainerDecoration,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      controller: textEditingController,
-                      decoration: kMessageTextFieldDecoration,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      if (textEditingController.text.trim().isNotEmpty) {
-                        // Send msg
-                        _fireStore.collection("messages").add(
-                            // Message Map
-                            {
-                              "text": textEditingController.text,
-                              "sender": loggedInUser.email,
-                              "date": FieldValue.serverTimestamp()
-                            });
-                        // Clear text
-                        textEditingController.clear();
-                      }
-                    },
-                    child: const Text(
-                      'Send',
-                      style: kSendButtonTextStyle,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            SendWidget(userEmail: loggedInUser.email ?? ""),
           ],
         ),
       ),
